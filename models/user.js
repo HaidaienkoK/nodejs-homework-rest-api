@@ -2,8 +2,6 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
-// const { modelName } = require("./contact");
-
 const userSchema = new Schema(
   {
     password: {
@@ -27,6 +25,14 @@ const userSchema = new Schema(
     avatarUrl: {
       type: String,
       required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
@@ -56,7 +62,15 @@ const schemas = {
 
 const User = model("user", userSchema);
 
+const emailSchema = Joi.object({
+  email: Joi.string().messages({
+      "any.required": `missing required email field`,
+    })
+    .required(),
+});
+
 module.exports = {
   User,
   schemas,
+  emailSchema,
 };
