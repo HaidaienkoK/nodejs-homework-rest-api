@@ -54,20 +54,24 @@ const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string()
+    .required()
+    .messages({
+      "any.required": `missing required email field`,
+    })
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  emailSchema,
 };
 
 const User = model("user", userSchema);
 
-const emailSchema = Joi.object({
-  email: Joi.string().messages({
-      "any.required": `missing required email field`,
-    })
-    .required(),
-});
+
 
 module.exports = {
   User,
